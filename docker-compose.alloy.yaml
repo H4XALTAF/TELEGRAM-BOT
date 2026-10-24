@@ -1,0 +1,22 @@
+services:
+  bot:
+    image: python:3.12-slim
+    working_dir: /workspace
+    network_mode: host
+    volumes:
+      - .:/workspace
+    environment:
+      IS_ALLOY: ${IS_ALLOY:-false}
+      PYTHONUNBUFFERED: "1"
+    restart: unless-stopped
+    command: bash -lc "pip install -q -r requirements.txt && python python.py"
+
+  status:
+    image: python:3.12-slim
+    working_dir: /workspace
+    network_mode: host
+    volumes:
+      - .:/workspace
+    environment:
+      STATUS_PORT: "3000"
+    command: python .alloy/status_server.py
